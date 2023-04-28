@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <string>
 #include <2geom/path.h>
@@ -17,7 +18,7 @@ int main(int argc, char** argv) {
 
     int i = 0;
     for(auto &path : path_vector) {
-        std::cout << "Path " << i++ << " has " << path.size() << " segments and is "
+        std::cout << "Sub-path #" << i++ << " has " << path.size() << " segments and is "
                   << (path.closed() ? "closed" : "open") << std::endl;
     }
 
@@ -29,6 +30,16 @@ int main(int argc, char** argv) {
     }
 
     std::cout << "Reversed: " << Geom::write_svg_path(rev, -1, false, false) << std::endl;
+
+    int orig_num_segments = 0;
+    for(auto &path : path_vector) {
+        orig_num_segments += path.size();
+    }
+    int reversed_num_segments = 0;
+    for(auto &path : rev) {
+        reversed_num_segments += path.size();
+    }
+    assert(orig_num_segments == reversed_num_segments);
 
     return 0;
 }
